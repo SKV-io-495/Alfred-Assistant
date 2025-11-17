@@ -1,38 +1,94 @@
-options:
-  logging: CLOUD_LOGGING_ONLY
-
 steps:
-  # 1. Build Docker image from backend/
-  - name: 'gcr.io/cloud-builders/docker'
-    dir: backend
-    args:
-      [
-        'build',
-        '-t',
-        'asia-south1-docker.pkg.dev/prime-motif-463107-q3/yeest-backend-repo/backend:$SHORT_SHA',
-        '.'
-      ]
+  # ==========================================
+  # PHASE 1: BACKEND
+  # ==========================================
 
-  # 2. Push image to Artifact Registry
+  # 1. Build Backend
   - name: 'gcr.io/cloud-builders/docker'
+    id: 'Build Backend'
+    dir: 'backend'
     args:
-      [
-        'push',
-        'asia-south1-docker.pkg.dev/prime-motif-463107-q3/yeest-backend-repo/backend:$SHORT_SHA'
-      ]
+      - 'build'
+      - '-t'
+      - 'asia-south1-docker.pkg.dev/alfred-app-478516/yeest-backend-repo/backend:$SHORT_SHA'
+      - '.'
 
-  # 3. Deploy to Cloud Run
+  # 2. Push Backend
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'Push Backend'
+    args:
+      - 'push'
+      - 'asia-south1-docker.pkg.dev/alfred-app-478516/yeest-backend-repo/backend:$SHORT_SHA'
+
+  # 3. Deploy Backend
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    id: 'Deploy Backend'
     entrypoint: gcloud
     args:
-      [
-        'run',
-        'deploy',
-        'yeest-backend',
-        '--image=asia-south1-docker.pkg.dev/prime-motif-463107-q3/yeest-backend-repo/backend:$SHORT_SHA',
-        '--region=asia-south1',
-        '--platform=managed',
-        '--allow-unauthenticated',
-        '--quiet'
-      ]
+      - 'run'
+      - 'deploy'
+      - 'alfred-backend'
+      - '--image=asia-south1-docker.pkg.dev/alfred-app-478516/yeest-backend-repo/backend:$SHORT_SHA'
+      - '--region=asia-south1'
+      - '--platform=managed'
+      - '--allow-unauthenticated'
+      - '--service-account=alfred-runtime@alfred-app-478516.iam.gserviceaccount.com'
+      # Secrets Mapping
+      - '--set-secrets=GROQ_API_KEY=ALFRED_GROQ_API_KEY:latest,NEWS_API_KEY=ALFRED_NEWS_API_KEY:latest,LANGCHAIN_API_KEY=LANGSMITH_API_KEY:latest'
+      # Env Vars (Enable Tracing now that you have a key!)
+      - '--set-env-vars=LANGCHAIN_TRACING_V2=true,LANGCHAIN_PROJECT=Alfred-Prod'
 
+  # ==========================================
+  # PHASE 2: FRONTEND
+  # ==========================================
+
+  # 4. Get Backend URL
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    id: 'Get Backend URL'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        gcloud run services describe alfred-backend --region=asia-south1 --format='value(status.url)' > backend_url.txt
+        echo "Backend URL is: $(cat backend_url.txt)"
+
+  # 5. Build Frontend (With URL Injection)
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'Build Frontend'
+    dir: 'frontend'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        docker build \
+          --build-arg NEXT_PUBLIC_API_URL=$(cat ../backend_url.txt) \
+          -t asia-south1-docker.pkg.dev/alfred-app-478516/yeest-backend-repo/frontend:$SHORT_SHA \
+          .
+
+  # 6. Push Frontend
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'Push Frontend'
+    args:
+      - 'push'
+      - 'asia-south1-docker.pkg.dev/alfred-app-478516/yeest-backend-repo/frontend:$SHORT_SHA'
+
+  # 7. Deploy Frontend
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    id: 'Deploy Frontend'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'alfred-frontend'
+      - '--image=asia-south1-docker.pkg.dev/alfred-app-478516/yeest-backend-repo/frontend:$SHORT_SHA'
+      - '--region=asia-south1'
+      - '--platform=managed'
+      - '--allow-unauthenticated'
+      - '--service-account=alfred-runtime@alfred-app-478516.iam.gserviceaccount.com'
+
+images:
+  - 'asia-south1-docker.pkg.dev/alfred-app-478516/yeest-backend-repo/backend:$SHORT_SHA'
+  - 'asia-south1-docker.pkg.dev/alfred-app-478516/yeest-backend-repo/frontend:$SHORT_SHA'
+
+options:
+  logging: CLOUD_LOGGING_ONLY

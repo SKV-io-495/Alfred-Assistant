@@ -16,6 +16,15 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
+# ==========================================
+# CRITICAL SECTION: INJECT BACKEND URL
+# ==========================================
+# We accept the ARG passed by Cloud Build
+ARG NEXT_PUBLIC_API_URL
+# We set it as an ENV var so 'npm run build' can see it
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+# ==========================================
+
 # Build the application
 RUN npm run build
 
