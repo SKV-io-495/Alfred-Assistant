@@ -37,6 +37,11 @@ steps:
       - '--set-secrets=GROQ_API_KEY=ALFRED_GROQ_API_KEY:latest,NEWS_API_KEY=ALFRED_NEWS_API_KEY:latest,LANGCHAIN_API_KEY=LANGSMITH_API_KEY:latest'
       # Env Vars (Enable Tracing now that you have a key!)
       - '--set-env-vars=LANGCHAIN_TRACING_V2=true,LANGCHAIN_PROJECT=Alfred-Prod'
+      # GIVE IT MUSCLE (Add these 3 lines)
+      # ==========================================
+      - '--memory=2Gi'      # <--- ADD THIS (2GB RAM for AI)
+      - '--cpu=2'           # <--- ADD THIS (2 CPUs)
+      - '--timeout=300'     # <--- ADD THIS (5 Minutes to download models)
 
   # ==========================================
   # PHASE 2: FRONTEND
