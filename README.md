@@ -1,4 +1,4 @@
-# yeest.xyz - RAG-Powered Chat Assistant
+# Alfred-AI - RAG-Powered Chat Assistant
 
 A modern, text-only RAG (Retrieval-Augmented Generation) powered chat assistant that provides real-time information from Wikipedia, news sources, and Reddit discussions. Built with LangChain, GROQ LLM, and comprehensive professional features including memory management, cost monitoring, and automated evaluation.
 
@@ -117,12 +117,12 @@ Create `backend/.env` with the following variables:
 ```env
 # Required
 GROQ_API_KEY=your_groq_api_key_here
+LANGSMITH_API_KEY=your_langsmith_api_key_here
 
 # Optional - for enhanced functionality
 NEWSAPI_KEY=your_newsapi_key_here
 REDDIT_CLIENT_ID=your_reddit_client_id_here
 REDDIT_CLIENT_SECRET=your_reddit_client_secret_here
-LANGSMITH_API_KEY=your_langsmith_api_key_here
 
 # Configuration (optional)
 GROQ_MODEL_NAME=mixtral-8x7b-32768
@@ -201,7 +201,7 @@ docker build -t yeest-frontend ./frontend
 
 ### Project Structure
 ```
-yeest/
+alfred-app/
 ├── backend/
 │   ├── app/
 │   │   ├── main.py              # FastAPI application
@@ -272,7 +272,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Support
 
-For support, please open an issue on GitHub or contact the development team.
+For support, please open an issue on GitHub .
 
 ---
 
