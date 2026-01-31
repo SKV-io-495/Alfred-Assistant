@@ -158,6 +158,26 @@ export default function Home() {
           </div>
         </header>
 
+        {/* --- ADD THIS WARNING BANNER --- */}
+        <div className="bg-amber-50 border-b border-amber-200 px-4 py-3">
+          <div className="max-w-4xl mx-auto flex items-start space-x-3">
+            <div className="flex-shrink-0">
+              <span className="text-xl">⏳</span>
+            </div>
+            <div>
+              <p className="text-sm font-medium text-amber-800">
+                Server Sleeping? Please be patient!
+              </p>
+              <p className="text-xs text-amber-700 mt-1">
+                This project is hosted on a <strong>free instance</strong> which spins down after inactivity. 
+                The first request may take <strong>up to 50 seconds</strong> to wake the backend. 
+                If it fails, please wait a moment and try again.
+              </p>
+            </div>
+          </div>
+        </div>
+        {/* -------------------------------- */}
+
         {/* Main chat area */}
         <main className="flex-1 flex flex-col max-w-4xl mx-auto w-full">
           <ChatWindow messages={messages} isLoading={isLoading} />

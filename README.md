@@ -1,5 +1,9 @@
 # Alfred-AI - RAG-Powered Chat Assistant
 
+**🔴 LIVE DEMO:** [https://alfred-assistant.vercel.app/](https://alfred-assistant.vercel.app/)  
+*(Note: Backend is on a free instance. Please allow ~50s for the first cold start.)*
+
+
 A modern, text-only RAG (Retrieval-Augmented Generation) powered chat assistant that provides real-time information from Wikipedia, news sources, and Reddit discussions. Built with LangChain, GROQ LLM, and comprehensive professional features including memory management, cost monitoring, and automated evaluation.
 
 ## 🚀 Features
@@ -27,6 +31,19 @@ A modern, text-only RAG (Retrieval-Augmented Generation) powered chat assistant 
                                               │   Evaluation    │
                                               └─────────────────┘
 ```
+
+## ☁️ Cloud Infrastructure & DevOps
+
+While the live demo runs on a lightweight free-tier architecture (Render + Vercel), this project was originally engineered for **production-grade serverless scaling** on Google Cloud Platform.
+
+The repository includes a complete **CI/CD pipeline** and **Infrastructure as Code** setup:
+
+* **Google Cloud Run**: Containerized backend deployment for auto-scaling.
+* **Cloud Build**: Automated CI/CD pipeline defined in [`cloudbuild.yaml`](./cloudbuild.yaml).
+* **Docker**: Fully containerized microservices architecture.
+* **Secret Management**: Production secrets handling via GCP Secret Manager.
+
+*You can view the production deployment configuration in the `cloudbuild.yaml` file.*
 
 ## 🛠️ Tech Stack
 
@@ -170,6 +187,11 @@ python -m app.eval_runner
 - Results logged to LangSmith for analysis
 
 ## 🚀 Deployment
+
+### Live Architecture
+- **Frontend**: Hosted on Vercel (Next.js)
+- **Backend**: Hosted on Render (Docker/FastAPI)
+- **Note**: The Render free tier spins down after 15 minutes of inactivity, causing a "cold start" delay on the initial request.
 
 ### Docker Deployment
 ```bash
