@@ -1,14 +1,15 @@
 # Use Node.js 18 Alpine image
 FROM node:18-alpine AS base
+RUN apk add --no-cache libc6-compat curl
 
 # Install dependencies only when needed
 FROM base AS deps
-RUN apk add --no-cache libc6-compat curl
 WORKDIR /app
 
 # Copy package files
 COPY package.json package-lock.json* ./
 RUN npm ci
+RUN npm install @next/swc-linux-x64-musl@14.2.29
 
 # Rebuild the source code only when needed
 FROM base AS builder

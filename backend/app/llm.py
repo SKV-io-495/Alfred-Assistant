@@ -1,7 +1,7 @@
-"""LLM factory module for yeest.xyz backend."""
+"""LLM factory module for alfred backend."""
 
 from langchain_groq import ChatGroq
-from langchain.embeddings import HuggingFaceEmbeddings
+from langchain_community.embeddings.fastembed import FastEmbedEmbeddings
 from .config import config
 
 def get_llm() -> ChatGroq:
@@ -16,11 +16,6 @@ def get_llm() -> ChatGroq:
     )
 
 def get_embeddings():
-    """Get embeddings model for vector store."""
-    # Using HuggingFace embeddings as a free alternative
-    # since GROQ doesn't provide embeddings API
-    return HuggingFaceEmbeddings(
-        model_name="sentence-transformers/all-MiniLM-L6-v2",
-        model_kwargs={'device': 'cpu'},
-        encode_kwargs={'normalize_embeddings': True}
-    )
+    """Get lightweight local embeddings model for vector store."""
+    # FastEmbed runs locally via ONNX. BAAI/bge-small-en-v1.5 is the default lightweight model.
+    return FastEmbedEmbeddings(model_name="BAAI/bge-small-en-v1.5")

@@ -29,8 +29,8 @@ export default function ChatWindow({
               Welcome to Alfred AI!
             </h2>
             <p className="text-gray-500 mb-6">
-              I'm your AI assistant powered by real-time information from
-              Wikipedia, news, and Reddit. Ask me anything and I'll provide you
+              I&apos;m your AI assistant powered by real-time information from
+              Wikipedia, news, and Reddit. Ask me anything and I&apos;ll provide you
               with up-to-date, sourced answers.
             </p>
             <div className="grid grid-cols-1 gap-2 text-sm text-gray-400">
