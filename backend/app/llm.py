@@ -16,6 +16,5 @@ def get_llm() -> ChatGroq:
     )
 
 def get_embeddings():
-    """Get lightweight local embeddings model for vector store."""
-    # FastEmbed runs locally via ONNX. BAAI/bge-small-en-v1.5 is the default lightweight model.
-    return FastEmbedEmbeddings(model_name="BAAI/bge-small-en-v1.5")
+    # Limit threads to 1 to prevent OOM kills on Render's 512MB free tier
+    return FastEmbedEmbeddings(model_name="BAAI/bge-small-en-v1.5", threads=1)

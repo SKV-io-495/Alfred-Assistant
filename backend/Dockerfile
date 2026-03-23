@@ -2,6 +2,7 @@
 FROM python:3.11-slim
 
 WORKDIR /app
+ENV ANONYMIZED_TELEMETRY=False
 
 
 # Copy requirements and install
