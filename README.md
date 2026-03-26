@@ -52,7 +52,7 @@ The repository includes a complete **CI/CD pipeline** and **Infrastructure as Co
 - **LangChain** for RAG implementation
 - **GROQ** for LLM inference (free tier)
 - **Chroma** for vector storage
-- **HuggingFace** embeddings
+- **FastEmbed** for lightweight local ONNX embeddings (bge-small-en-v1.5) bypassing external API limits
 - **LangSmith** for monitoring and tracing
 
 ### Frontend
@@ -189,8 +189,8 @@ python -m app.eval_runner
 ## 🚀 Deployment
 
 ### Live Architecture
-- **Frontend**: Hosted on Vercel (Next.js)
-- **Backend**: Hosted on Render (Docker/FastAPI)
+- **Frontend**: Hosted on Vercel (Next.js). Requires the `BACKEND_URL` environment variable properly configured in the dashboard.
+- **Backend**: Hosted on Render (Docker/FastAPI). Our optimized Dockerfile securely caches the FastEmbed ONNX model natively at build-time and single-threads the runtime to completely eliminate Render's 512MB RAM OOM limits and Vercel's 10-second Serverless Gateway timeouts.
 - **Note**: The Render free tier spins down after 15 minutes of inactivity, causing a "cold start" delay on the initial request.
 
 ### Docker Deployment
@@ -288,6 +288,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - **LangChain** for the RAG framework
 - **GROQ** for fast LLM inference
+- **FastEmbed** for local ONNX embeddings
 - **Anthropic** for Claude model inspiration
 - **Vercel** for Next.js framework
 - **FastAPI** for the backend framework

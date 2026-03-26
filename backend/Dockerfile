@@ -3,6 +3,7 @@ FROM python:3.11-slim
 
 WORKDIR /app
 ENV ANONYMIZED_TELEMETRY=False
+ENV FASTEMBED_CACHE_PATH=/app/fastembed_cache
 
 
 # Copy requirements and install

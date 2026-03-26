@@ -16,7 +16,7 @@ class ChatMemoryManager:
         # Buffer memory for recent conversations
         self.buffer_memory = ConversationBufferMemory(
             memory_key="chat_history",
-            return_messages=True,
+            return_messages=False,
             k=config.MEMORY_BUFFER_SIZE,
             input_key="question" 
         )

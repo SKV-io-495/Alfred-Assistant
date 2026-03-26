@@ -11,7 +11,7 @@ def get_llm() -> ChatGroq:
         model_name=config.GROQ_MODEL_NAME,
         temperature=0.1,
         max_tokens=2048,
-        timeout=60,
+        timeout=300,  # 5 minutes
         max_retries=2
     )
 

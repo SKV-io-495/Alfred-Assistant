@@ -85,8 +85,8 @@ async def chat(request: ChatRequest):
         for doc in documents[:3]:  # Log first 3 documents
             logger.info(f"Document source: {doc.metadata.get('source', 'unknown')}, title: {doc.metadata.get('title', 'no title')[:50]}")
 
-        # Get the RAG chain
-        rag_chain = rag_system.get_rag_chain()
+        # Get the RAG chain (with memory attached)
+        rag_chain = rag_system.get_rag_chain(memory=memory_manager.combined_memory)
 
         # Run the chain
         result = rag_chain({"query": request.question})

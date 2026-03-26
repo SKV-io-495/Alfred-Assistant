@@ -18,7 +18,7 @@ export default async function handler(
       headers: {
         'Content-Type': 'application/json',
       },
-      timeout: 60000, // 60 second timeout
+      timeout: 300000, // 5 minute timeout
     })
 
     res.status(200).json(response.data)

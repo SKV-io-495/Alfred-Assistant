@@ -81,7 +81,7 @@ class RAGSystem:
         
         logger.info(f"Indexed {len(chunked_docs)} document chunks")
     
-    def get_rag_chain(self, k: int = None) -> RetrievalQA:
+    def get_rag_chain(self, k: int = None, memory=None) -> RetrievalQA:
         """Get the RAG chain for question answering."""
         if k is None:
             k = config.RAG_K
@@ -98,6 +98,12 @@ class RAGSystem:
                             Otherwise, decide if the context provided is relevant to query being asked, if not relevant, just say that you don't know. 
                             Don't mention anything about context.
         
+        Conversation History:
+        {chat_history}
+        
+        Conversation Summary:
+        {chat_history_summary}
+        
         Context:
         {context}
         
@@ -107,15 +113,20 @@ class RAGSystem:
         
         PROMPT = PromptTemplate(
             template=prompt_template,
-            input_variables=["context", "question"]
+            input_variables=["context", "question", "chat_history", "chat_history_summary"]
         )
+        
+        # Build chain kwargs
+        chain_kwargs = {"prompt": PROMPT}
+        if memory is not None:
+            chain_kwargs["memory"] = memory
         
         # Create the RetrievalQA chain
         chain = RetrievalQA.from_chain_type(
             llm=self.llm,
             chain_type="stuff",
             retriever=retriever,
-            chain_type_kwargs={"prompt": PROMPT},
+            chain_type_kwargs=chain_kwargs,
             return_source_documents=True
         )
         
