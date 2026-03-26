@@ -1,5 +1,7 @@
 # Alfred-AI - RAG-Powered Chat Assistant
 
+[![Alfred Assistant Demo](https://github.com/user-attachments/assets/b8eec45e-d819-4579-9e6e-0e0db2e5e0e7)](https://drive.google.com/file/d/180I7kAu0v2blqGuMLc5yticLmQIkEvzf/view?usp=sharing)
+
 **🔴 LIVE DEMO:** [https://alfred-assistant.vercel.app/](https://alfred-assistant.vercel.app/)  
 *(Note: Backend is on a free instance. Please allow ~50s for the first cold start.)*
 
